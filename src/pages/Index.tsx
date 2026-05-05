@@ -132,43 +132,10 @@ export default function Index() {
       {/* MAIN */}
       <main className="flex-1 max-w-[1600px] mx-auto w-full px-4 py-5 gap-4
         flex flex-col
-        lg:grid lg:grid-cols-[1fr_27%] lg:grid-rows-1">
+        lg:grid lg:grid-cols-[1fr_42%] lg:grid-rows-1">
 
-        {/* ═══ SCENE PICKER + PREVIEW ═══ */}
+        {/* ═══ SCENE PICKER ═══ */}
         <section className={`flex flex-col gap-4 transition-opacity duration-300 ${!hasActiveHeat ? 'opacity-40 pointer-events-none' : ''}`}>
-
-          {/* Preview block */}
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center justify-center">
-              <OnAirPill isOnAir={isOnAir} large />
-            </div>
-            <PreviewTile
-              scene={isOnAir ? activeScene : null}
-              focusedAthlete={focusedAthlete}
-              showHeatName={showHeatName}
-              showTime={showTime}
-              heatName={activeHeat.name}
-              viewMode={viewMode}
-              onViewModeChange={setViewMode}
-            />
-            {!hasActiveHeat && (
-              <div className="flex flex-col items-center gap-2 py-4 text-center animate-fade-in">
-                <div className="w-12 h-12 rounded-full bg-[#F1F5F9] flex items-center justify-center mb-1">
-                  <Icon name="MonitorOff" size={20} className="text-[#94A3B8]" />
-                </div>
-                <p className="text-sm font-inter font-semibold text-[#64748B]">Нет активного хита</p>
-                <p className="text-[11px] text-[#94A3B8] max-w-[200px] leading-relaxed text-center">
-                  Запустите заезд, чтобы начать управление трансляцией
-                </p>
-                <button
-                  onClick={() => setHasActiveHeat(true)}
-                  className="mt-2 px-4 py-2 rounded-lg bg-[#2F6BFF] text-white text-xs font-inter font-semibold hover:bg-[#1a56e8] transition-colors"
-                >
-                  Запустить хит
-                </button>
-              </div>
-            )}
-          </div>
 
           <div className="flex items-center gap-2">
             <h2 className="text-[15px] font-inter font-bold text-[#0F172A]">Сцена</h2>
@@ -219,8 +186,42 @@ export default function Index() {
           </div>
         </section>
 
-        {/* ═══ ATHLETES ═══ */}
-        <section className={`flex flex-col gap-3 transition-opacity duration-300 ${!hasActiveHeat ? 'opacity-40 pointer-events-none' : ''}`}>
+        {/* ═══ ATHLETES + PREVIEW ═══ */}
+        <section className={`flex flex-col gap-4 transition-opacity duration-300 ${!hasActiveHeat ? 'opacity-40 pointer-events-none' : ''}`}>
+
+          {/* Preview block */}
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-center">
+              <OnAirPill isOnAir={isOnAir} large />
+            </div>
+            <PreviewTile
+              scene={isOnAir ? activeScene : null}
+              focusedAthlete={focusedAthlete}
+              showHeatName={showHeatName}
+              showTime={showTime}
+              heatName={activeHeat.name}
+              viewMode={viewMode}
+              onViewModeChange={setViewMode}
+            />
+            {!hasActiveHeat && (
+              <div className="flex flex-col items-center gap-2 py-4 text-center animate-fade-in">
+                <div className="w-12 h-12 rounded-full bg-[#F1F5F9] flex items-center justify-center mb-1">
+                  <Icon name="MonitorOff" size={20} className="text-[#94A3B8]" />
+                </div>
+                <p className="text-sm font-inter font-semibold text-[#64748B]">Нет активного хита</p>
+                <p className="text-[11px] text-[#94A3B8] max-w-[200px] leading-relaxed text-center">
+                  Запустите заезд, чтобы начать управление трансляцией
+                </p>
+                <button
+                  onClick={() => setHasActiveHeat(true)}
+                  className="mt-2 px-4 py-2 rounded-lg bg-[#2F6BFF] text-white text-xs font-inter font-semibold hover:bg-[#1a56e8] transition-colors"
+                >
+                  Запустить хит
+                </button>
+              </div>
+            )}
+          </div>
+
           <div className="flex items-center gap-2">
             <h2 className="text-[15px] font-inter font-bold text-[#0F172A]">Спортсмены</h2>
             <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#F1F5F9] text-[10px] font-inter font-bold text-[#64748B]">
