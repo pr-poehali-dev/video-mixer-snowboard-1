@@ -178,32 +178,54 @@ export default function Index() {
           </div>
 
           {/* Overlays */}
-          <div>
+          <div className={`transition-opacity ${overlaysDisabled ? 'opacity-40 pointer-events-none' : ''}`}>
             <div className="flex items-center gap-2 mb-3">
               <h3 className="text-[11px] font-inter font-semibold text-[#64748B] uppercase tracking-wider">Дополнительно</h3>
               <span className="text-[10px] text-[#CBD5E1]">· Поверх выбранной сцены</span>
             </div>
-            <div className={`flex flex-wrap gap-2 overflow-x-auto pb-1 transition-opacity ${overlaysDisabled ? 'opacity-40' : ''}`}>
-              <OverlayChip
-                label="Название хита"
-                icon="Flag"
-                active={showHeatName}
-                disabled={overlaysDisabled}
-                onToggle={() => setShowHeatName(v => !v)}
-              />
-              <OverlayChip
-                label="Время"
-                icon="Clock"
-                active={showTime}
-                disabled={overlaysDisabled}
-                onToggle={() => setShowTime(v => !v)}
-              />
-              <OverlayChip
-                label="Реклама (всегда)"
-                icon="Megaphone"
-                active={true}
-                locked={true}
-              />
+            <div className="flex flex-col gap-0 rounded-xl border border-[#E2E8F0] bg-white overflow-hidden divide-y divide-[#E2E8F0]">
+              {/* Row: Название хита */}
+              <div className="flex items-center justify-between px-4 py-3">
+                <div>
+                  <p className="text-sm font-inter font-medium text-[#0F172A]">Название хита</p>
+                  <p className="text-[11px] text-[#94A3B8] mt-0.5">Показывать название заезда</p>
+                </div>
+                <button
+                  onClick={() => setShowHeatName(v => !v)}
+                  aria-label="Переключить название хита"
+                  className={`relative inline-flex h-6 w-11 shrink-0 rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none
+                    ${showHeatName ? 'bg-[#2F6BFF]' : 'bg-[#CBD5E1]'}`}
+                >
+                  <span className={`inline-block h-5 w-5 rounded-full bg-white shadow-sm transition-transform duration-200
+                    ${showHeatName ? 'translate-x-5' : 'translate-x-0'}`} />
+                </button>
+              </div>
+              {/* Row: Время */}
+              <div className="flex items-center justify-between px-4 py-3">
+                <div>
+                  <p className="text-sm font-inter font-medium text-[#0F172A]">Время</p>
+                  <p className="text-[11px] text-[#94A3B8] mt-0.5">Таймер текущего заезда</p>
+                </div>
+                <button
+                  onClick={() => setShowTime(v => !v)}
+                  aria-label="Переключить время"
+                  className={`relative inline-flex h-6 w-11 shrink-0 rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none
+                    ${showTime ? 'bg-[#2F6BFF]' : 'bg-[#CBD5E1]'}`}
+                >
+                  <span className={`inline-block h-5 w-5 rounded-full bg-white shadow-sm transition-transform duration-200
+                    ${showTime ? 'translate-x-5' : 'translate-x-0'}`} />
+                </button>
+              </div>
+              {/* Row: Реклама */}
+              <div className="flex items-center justify-between px-4 py-3 bg-[#F8FAFC]">
+                <div>
+                  <p className="text-sm font-inter font-medium text-[#94A3B8]">Реклама</p>
+                  <p className="text-[11px] text-[#CBD5E1] mt-0.5">Всегда включена</p>
+                </div>
+                <div className="relative inline-flex h-6 w-11 shrink-0 rounded-full bg-[#2F6BFF] opacity-50 cursor-not-allowed">
+                  <span className="inline-block h-5 w-5 rounded-full bg-white shadow-sm translate-x-5" />
+                </div>
+              </div>
             </div>
           </div>
         </section>
