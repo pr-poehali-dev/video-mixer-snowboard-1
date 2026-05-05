@@ -137,6 +137,27 @@ export default function Index() {
         {/* ═══ SCENE PICKER ═══ */}
         <section className={`flex flex-col gap-4 transition-opacity duration-300 ${!hasActiveHeat ? 'opacity-40 pointer-events-none' : ''}`}>
 
+          {/* Publish row */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setHasActiveHeat(v => !v)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-inter font-semibold transition-all
+                ${hasActiveHeat
+                  ? 'bg-[#E5263C] text-white hover:bg-[#cc1f32]'
+                  : 'bg-[#2F6BFF] text-white hover:bg-[#1a56e8]'
+                }`}
+            >
+              {hasActiveHeat
+                ? <><span className="w-2 h-2 rounded-full bg-white blink-dot shrink-0" /> В эфире</>
+                : <><Icon name="Radio" size={14} /> Опубликовать</>
+              }
+            </button>
+            <label className="flex items-center gap-2 cursor-pointer select-none">
+              <input type="checkbox" className="w-4 h-4 rounded accent-[#2F6BFF] cursor-pointer" />
+              <span className="text-xs font-inter text-[#64748B]">Автопубликация через 5 сек</span>
+            </label>
+          </div>
+
           <div className="flex items-center gap-2">
             <h2 className="text-[15px] font-inter font-bold text-[#0F172A]">Сцена</h2>
             <button aria-label="Справка" className="text-[#CBD5E1] hover:text-[#94A3B8] transition-colors">
@@ -191,29 +212,6 @@ export default function Index() {
 
           {/* Preview block */}
           <div className="flex flex-col gap-3">
-            {/* Publish row */}
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => setHasActiveHeat(v => !v)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-inter font-semibold transition-all
-                  ${isOnAir
-                    ? 'bg-[#E5263C] text-white hover:bg-[#cc1f32]'
-                    : 'bg-[#2F6BFF] text-white hover:bg-[#1a56e8]'
-                  }`}
-              >
-                {isOnAir
-                  ? <><span className="w-2 h-2 rounded-full bg-white blink-dot" /> В эфире</>
-                  : <><Icon name="Radio" size={14} /> Опубликовать</>
-                }
-              </button>
-              <label className="flex items-center gap-2 cursor-pointer select-none">
-                <input
-                  type="checkbox"
-                  className="w-4 h-4 rounded accent-[#2F6BFF] cursor-pointer"
-                />
-                <span className="text-xs font-inter text-[#64748B]">Автопубликация через 5 сек</span>
-              </label>
-            </div>
             <PreviewTile
               scene={isOnAir ? activeScene : null}
               focusedAthlete={focusedAthlete}
