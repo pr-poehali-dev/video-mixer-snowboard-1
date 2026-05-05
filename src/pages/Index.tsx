@@ -1,14 +1,287 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { SCENES, HEATS, ATHLETES, SceneId, Heat } from '@/data/mixer';
+import OnAirPill from '@/components/mixer/OnAirPill';
+import PreviewTile from '@/components/mixer/PreviewTile';
+import ScenePickerTile from '@/components/mixer/ScenePickerTile';
+import OverlayChip from '@/components/mixer/OverlayChip';
+import AthleteCard from '@/components/mixer/AthleteCard';
+import HeatDropdown from '@/components/mixer/HeatDropdown';
+import HotkeysPopover from '@/components/mixer/HotkeysPopover';
+import Icon from '@/components/ui/icon';
 
-const Index = () => {
+export default function Index() {
+  const [activeScene, setActiveScene] = useState<SceneId>('athlete-focus');
+  const [focusedAthleteId, setFocusedAthleteId] = useState<number>(2);
+  const [showHeatName, setShowHeatName] = useState(true);
+  const [showTime, setShowTime] = useState(false);
+  const [viewMode, setViewMode] = useState<'schematic' | 'live'>('schematic');
+  const [activeHeat, setActiveHeat] = useState<Heat>(HEATS[0]);
+  const [hasActiveHeat, setHasActiveHeat] = useState(true);
+  const [hotkeysOpen, setHotkeysOpen] = useState(false);
+  const hotkeysRef = useRef<HTMLDivElement>(null);
+
+  const isOnAir = activeScene !== 'black' && hasActiveHeat;
+  const focusedAthlete = ATHLETES.find(a => a.id === focusedAthleteId) || null;
+  const showScores = activeScene === 'athletes-table' || activeScene === 'athlete-focus';
+  const focusedAthleteIndex = ATHLETES.findIndex(a => a.id === focusedAthleteId);
+
+  const focusNext = useCallback(() => {
+    const next = (focusedAthleteIndex + 1) % ATHLETES.length;
+    setFocusedAthleteId(ATHLETES[next].id);
+  }, [focusedAthleteIndex]);
+
+  const focusPrev = useCallback(() => {
+    const prev = (focusedAthleteIndex - 1 + ATHLETES.length) % ATHLETES.length;
+    setFocusedAthleteId(ATHLETES[prev].id);
+  }, [focusedAthleteIndex]);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement).tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+      switch (e.key) {
+        case '1': setActiveScene('black'); break;
+        case '2': setActiveScene('athletes-table'); break;
+        case '3': setActiveScene('athlete-focus'); break;
+        case '4': setActiveScene('all-athletes'); break;
+        case '0': setActiveScene('black'); break;
+        case 'ArrowUp': e.preventDefault(); focusPrev(); break;
+        case 'ArrowDown': e.preventDefault(); focusNext(); break;
+        case 'h': case 'H': setShowHeatName(v => !v); break;
+        case 't': case 'T': setShowTime(v => !v); break;
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [focusNext, focusPrev]);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (hotkeysRef.current && !hotkeysRef.current.contains(e.target as Node)) {
+        setHotkeysOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  const overlaysDisabled = !isOnAir;
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4 color-black text-black">Добро пожаловать!</h1>
-        <p className="text-xl text-gray-600">тут будет отображаться ваш проект</p>
-      </div>
+    <div className="min-h-screen bg-[#F8FAFC] font-inter flex flex-col">
+
+      {/* HEADER */}
+      <header className="sticky top-0 z-40 bg-white border-b border-[#E2E8F0] shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+        <div className="flex items-center justify-between px-5 py-3 max-w-[1600px] mx-auto">
+
+          {/* Left */}
+          <div className="flex items-center gap-3 min-w-0 shrink-0">
+            <div className="w-7 h-7 rounded-lg bg-[#2F6BFF] flex items-center justify-center shrink-0">
+              <Icon name="Tv" size={14} className="text-white" />
+            </div>
+            <div>
+              <div className="text-sm font-inter font-bold text-[#0F172A] leading-tight tracking-tight">Видеомикшер</div>
+              <div className="text-[10px] text-[#64748B] font-inter leading-tight">Бордспорт</div>
+            </div>
+            <div className="hidden md:flex items-center gap-1.5">
+              <Icon name="ChevronRight" size={12} className="text-[#CBD5E1]" />
+              <span className="text-xs text-[#94A3B8] font-inter">Snowboard Slopestyle 2026</span>
+            </div>
+          </div>
+
+          {/* Center */}
+          <div className="flex-1 flex justify-center px-4 min-w-0">
+            {hasActiveHeat ? (
+              <HeatDropdown heats={HEATS} activeHeat={activeHeat} onSelect={setActiveHeat} />
+            ) : (
+              <span className="text-sm font-inter font-medium text-[#94A3B8]">Нет активного хита</span>
+            )}
+          </div>
+
+          {/* Right */}
+          <div className="flex items-center gap-2 shrink-0 relative" ref={hotkeysRef}>
+            <div className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-inter font-semibold
+              ${hasActiveHeat ? 'bg-[#ECFDF5] text-[#1FB371]' : 'bg-[#F1F5F9] text-[#94A3B8]'}`}>
+              <span className={`w-1.5 h-1.5 rounded-full ${hasActiveHeat ? 'bg-[#1FB371] blink-dot' : 'bg-[#CBD5E1]'}`} />
+              {hasActiveHeat ? 'Идёт трансляция' : 'Нет трансляции'}
+            </div>
+
+            <button
+              onClick={() => setHotkeysOpen(o => !o)}
+              aria-label="Горячие клавиши"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#E2E8F0] bg-white text-[11px] font-inter font-medium text-[#64748B] hover:text-[#0F172A] hover:border-[#CBD5E1] transition-all"
+            >
+              <Icon name="Keyboard" size={13} />
+              <span className="hidden md:inline">Горячие клавиши</span>
+            </button>
+
+            <button
+              onClick={() => setHasActiveHeat(v => !v)}
+              title={hasActiveHeat ? 'Остановить трансляцию (демо)' : 'Запустить трансляцию (демо)'}
+              aria-label="Меню"
+              className="w-8 h-8 flex items-center justify-center rounded-lg border border-[#E2E8F0] bg-white text-[#64748B] hover:text-[#0F172A] hover:border-[#CBD5E1] transition-all"
+            >
+              <Icon name="MoreVertical" size={14} />
+            </button>
+
+            <HotkeysPopover open={hotkeysOpen} onClose={() => setHotkeysOpen(false)} />
+          </div>
+        </div>
+      </header>
+
+      {/* MAIN */}
+      <main className="flex-1 max-w-[1600px] mx-auto w-full px-4 py-5 gap-4
+        flex flex-col
+        md:grid md:grid-cols-2 md:grid-rows-[auto_1fr]
+        lg:grid lg:grid-cols-[28%_1fr_27%] lg:grid-rows-1">
+
+        {/* ═══ PREVIEW ═══ */}
+        <section className="flex flex-col gap-3 md:col-span-2 md:row-span-1 lg:col-span-1 lg:row-span-1 lg:sticky lg:top-[61px] lg:self-start">
+          <div className="flex items-center justify-center">
+            <OnAirPill isOnAir={isOnAir} large />
+          </div>
+
+          <div className={`transition-opacity duration-300 ${!hasActiveHeat ? 'opacity-40 pointer-events-none' : ''}`}>
+            <PreviewTile
+              scene={isOnAir ? activeScene : null}
+              focusedAthlete={focusedAthlete}
+              showHeatName={showHeatName}
+              showTime={showTime}
+              heatName={activeHeat.name}
+              viewMode={viewMode}
+              onViewModeChange={setViewMode}
+            />
+          </div>
+
+          {!hasActiveHeat && (
+            <div className="flex flex-col items-center gap-2 py-4 text-center animate-fade-in">
+              <div className="w-12 h-12 rounded-full bg-[#F1F5F9] flex items-center justify-center mb-1">
+                <Icon name="MonitorOff" size={20} className="text-[#94A3B8]" />
+              </div>
+              <p className="text-sm font-inter font-semibold text-[#64748B]">Нет активного хита</p>
+              <p className="text-[11px] text-[#94A3B8] max-w-[200px] leading-relaxed text-center">
+                Запустите заезд, чтобы начать управление трансляцией
+              </p>
+              <button
+                onClick={() => setHasActiveHeat(true)}
+                className="mt-2 px-4 py-2 rounded-lg bg-[#2F6BFF] text-white text-xs font-inter font-semibold hover:bg-[#1a56e8] transition-colors"
+              >
+                Запустить хит
+              </button>
+            </div>
+          )}
+        </section>
+
+        {/* ═══ SCENE PICKER ═══ */}
+        <section className={`flex flex-col gap-4 transition-opacity duration-300 ${!hasActiveHeat ? 'opacity-40 pointer-events-none' : ''}`}>
+          <div className="flex items-center gap-2">
+            <h2 className="text-[15px] font-inter font-bold text-[#0F172A]">Сцена</h2>
+            <button aria-label="Справка" className="text-[#CBD5E1] hover:text-[#94A3B8] transition-colors">
+              <Icon name="HelpCircle" size={14} />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            {SCENES.map(scene => (
+              <ScenePickerTile
+                key={scene.id}
+                scene={scene}
+                isActive={activeScene === scene.id && isOnAir}
+                onSelect={setActiveScene}
+              />
+            ))}
+          </div>
+
+          {/* Overlays */}
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <h3 className="text-[11px] font-inter font-semibold text-[#64748B] uppercase tracking-wider">Дополнительно</h3>
+              <span className="text-[10px] text-[#CBD5E1]">· Поверх выбранной сцены</span>
+            </div>
+            <div className={`flex flex-wrap gap-2 overflow-x-auto pb-1 transition-opacity ${overlaysDisabled ? 'opacity-40' : ''}`}>
+              <OverlayChip
+                label="Название хита"
+                icon="Flag"
+                active={showHeatName}
+                disabled={overlaysDisabled}
+                onToggle={() => setShowHeatName(v => !v)}
+              />
+              <OverlayChip
+                label="Время"
+                icon="Clock"
+                active={showTime}
+                disabled={overlaysDisabled}
+                onToggle={() => setShowTime(v => !v)}
+              />
+              <OverlayChip
+                label="Реклама (всегда)"
+                icon="Megaphone"
+                active={true}
+                locked={true}
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* ═══ ATHLETES ═══ */}
+        <section className={`flex flex-col gap-3 transition-opacity duration-300 ${!hasActiveHeat ? 'opacity-40 pointer-events-none' : ''}`}>
+          <div className="flex items-center gap-2">
+            <h2 className="text-[15px] font-inter font-bold text-[#0F172A]">Спортсмены</h2>
+            <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#F1F5F9] text-[10px] font-inter font-bold text-[#64748B]">
+              {ATHLETES.length}
+            </span>
+            {hasActiveHeat && (
+              <div className="flex items-center gap-1 ml-auto">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#1FB371] blink-dot" />
+                <span className="text-[10px] font-inter text-[#1FB371] font-medium">live</span>
+              </div>
+            )}
+          </div>
+
+          <div className="flex flex-col gap-1.5 overflow-y-auto max-h-[calc(100vh-240px)] pr-0.5">
+            {ATHLETES.map(athlete => (
+              <AthleteCard
+                key={athlete.id}
+                athlete={athlete}
+                isFocused={focusedAthleteId === athlete.id}
+                isOnAirFocus={focusedAthleteId === athlete.id && activeScene === 'athlete-focus' && isOnAir}
+                showScores={showScores}
+                onClick={() => setFocusedAthleteId(athlete.id)}
+              />
+            ))}
+          </div>
+
+          <div className="flex gap-2 pt-1 shrink-0">
+            <button
+              onClick={() => setFocusedAthleteId(ATHLETES[0].id)}
+              aria-label="Сбросить фокус"
+              className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-[#E2E8F0] bg-white text-xs font-inter font-medium text-[#64748B] hover:border-[#CBD5E1] hover:text-[#0F172A] transition-all min-h-[44px]"
+            >
+              <Icon name="X" size={12} />
+              Сбросить фокус
+            </button>
+            <button
+              onClick={focusNext}
+              aria-label="Следующий атлет"
+              className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-[#E2E8F0] bg-white text-xs font-inter font-medium text-[#64748B] hover:border-[#CBD5E1] hover:text-[#0F172A] transition-all min-h-[44px]"
+            >
+              Следующий
+              <Icon name="ArrowDown" size={12} />
+            </button>
+          </div>
+        </section>
+      </main>
+
+      {/* FAB — mobile only */}
+      {hasActiveHeat && (
+        <button
+          onClick={() => setActiveScene('black')}
+          aria-label="Убрать из эфира"
+          className="fixed bottom-5 right-5 z-50 lg:hidden w-14 h-14 rounded-full bg-[#E5263C] text-white shadow-xl flex items-center justify-center hover:bg-[#cc1f32] active:scale-95 transition-all"
+        >
+          <Icon name="MonitorOff" size={20} />
+        </button>
+      )}
     </div>
   );
-};
-
-export default Index;
+}
