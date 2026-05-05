@@ -188,13 +188,13 @@ export default function Index() {
               <button
                 onClick={() => setShowHeatName(v => !v)}
                 aria-pressed={showHeatName}
-                className={`flex flex-col items-start gap-3 p-3 rounded-[14px] border-2 transition-all duration-150 tile-hover text-left
+                className={`flex flex-col items-center justify-center gap-2 p-3 rounded-[14px] border-2 transition-all duration-150 tile-hover
                   ${showHeatName ? 'border-[#2F6BFF] bg-[#EEF3FF]' : 'border-[#E2E8F0] bg-white hover:border-[#CBD5E1]'}`}
               >
-                <Icon name="Flag" size={18} className={showHeatName ? 'text-[#2F6BFF]' : 'text-[#94A3B8]'} />
-                <p className={`text-xs font-inter font-semibold leading-tight ${showHeatName ? 'text-[#2F6BFF]' : 'text-[#0F172A]'}`}>
-                  Название хита
-                </p>
+                <div className="flex items-center gap-1.5">
+                  <Icon name="Flag" size={14} className={showHeatName ? 'text-[#2F6BFF]' : 'text-[#94A3B8]'} />
+                  <p className={`text-xs font-inter font-semibold leading-tight ${showHeatName ? 'text-[#2F6BFF]' : 'text-[#0F172A]'}`}>Название хита</p>
+                </div>
                 <div className={`relative inline-flex h-5 w-9 shrink-0 rounded-full border-2 border-transparent transition-colors duration-200
                   ${showHeatName ? 'bg-[#2F6BFF]' : 'bg-[#CBD5E1]'}`}>
                   <span className={`inline-block h-4 w-4 rounded-full bg-white shadow-sm transition-transform duration-200
@@ -205,13 +205,13 @@ export default function Index() {
               <button
                 onClick={() => setShowTime(v => !v)}
                 aria-pressed={showTime}
-                className={`flex flex-col items-start gap-3 p-3 rounded-[14px] border-2 transition-all duration-150 tile-hover text-left
+                className={`flex flex-col items-center justify-center gap-2 p-3 rounded-[14px] border-2 transition-all duration-150 tile-hover
                   ${showTime ? 'border-[#2F6BFF] bg-[#EEF3FF]' : 'border-[#E2E8F0] bg-white hover:border-[#CBD5E1]'}`}
               >
-                <Icon name="Clock" size={18} className={showTime ? 'text-[#2F6BFF]' : 'text-[#94A3B8]'} />
-                <p className={`text-xs font-inter font-semibold leading-tight ${showTime ? 'text-[#2F6BFF]' : 'text-[#0F172A]'}`}>
-                  Время
-                </p>
+                <div className="flex items-center gap-1.5">
+                  <Icon name="Clock" size={14} className={showTime ? 'text-[#2F6BFF]' : 'text-[#94A3B8]'} />
+                  <p className={`text-xs font-inter font-semibold leading-tight ${showTime ? 'text-[#2F6BFF]' : 'text-[#0F172A]'}`}>Время</p>
+                </div>
                 <div className={`relative inline-flex h-5 w-9 shrink-0 rounded-full border-2 border-transparent transition-colors duration-200
                   ${showTime ? 'bg-[#2F6BFF]' : 'bg-[#CBD5E1]'}`}>
                   <span className={`inline-block h-4 w-4 rounded-full bg-white shadow-sm transition-transform duration-200
@@ -219,9 +219,11 @@ export default function Index() {
                 </div>
               </button>
               {/* Tile: Реклама */}
-              <div className="flex flex-col items-start gap-3 p-3 rounded-[14px] border-2 border-[#2F6BFF] bg-[#EEF3FF] opacity-50 cursor-not-allowed">
-                <Icon name="Megaphone" size={18} className="text-[#2F6BFF]" />
-                <p className="text-xs font-inter font-semibold leading-tight text-[#2F6BFF]">Реклама</p>
+              <div className="flex flex-col items-center justify-center gap-2 p-3 rounded-[14px] border-2 border-[#2F6BFF] bg-[#EEF3FF] opacity-50 cursor-not-allowed">
+                <div className="flex items-center gap-1.5">
+                  <Icon name="Megaphone" size={14} className="text-[#2F6BFF]" />
+                  <p className="text-xs font-inter font-semibold leading-tight text-[#2F6BFF]">Реклама</p>
+                </div>
                 <div className="relative inline-flex h-5 w-9 shrink-0 rounded-full bg-[#2F6BFF]">
                   <span className="inline-block h-4 w-4 rounded-full bg-white shadow-sm translate-x-4" />
                 </div>
