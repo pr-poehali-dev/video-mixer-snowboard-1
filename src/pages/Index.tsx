@@ -183,47 +183,47 @@ export default function Index() {
               <h3 className="text-[11px] font-inter font-semibold text-[#64748B] uppercase tracking-wider">Дополнительно</h3>
               <span className="text-[10px] text-[#CBD5E1]">· Поверх выбранной сцены</span>
             </div>
-            <div className="flex flex-col gap-0 rounded-xl border border-[#E2E8F0] bg-white overflow-hidden divide-y divide-[#E2E8F0]">
-              {/* Row: Название хита */}
-              <div className="flex items-center justify-between px-4 py-3">
-                <div>
-                  <p className="text-sm font-inter font-medium text-[#0F172A]">Название хита</p>
-                  <p className="text-[11px] text-[#94A3B8] mt-0.5">Показывать название заезда</p>
+            <div className="grid grid-cols-3 gap-3">
+              {/* Tile: Название хита */}
+              <button
+                onClick={() => setShowHeatName(v => !v)}
+                aria-pressed={showHeatName}
+                className={`flex flex-col items-start gap-3 p-3 rounded-[14px] border-2 transition-all duration-150 tile-hover text-left
+                  ${showHeatName ? 'border-[#2F6BFF] bg-[#EEF3FF]' : 'border-[#E2E8F0] bg-white hover:border-[#CBD5E1]'}`}
+              >
+                <Icon name="Flag" size={18} className={showHeatName ? 'text-[#2F6BFF]' : 'text-[#94A3B8]'} />
+                <p className={`text-xs font-inter font-semibold leading-tight ${showHeatName ? 'text-[#2F6BFF]' : 'text-[#0F172A]'}`}>
+                  Название хита
+                </p>
+                <div className={`relative inline-flex h-5 w-9 shrink-0 rounded-full border-2 border-transparent transition-colors duration-200
+                  ${showHeatName ? 'bg-[#2F6BFF]' : 'bg-[#CBD5E1]'}`}>
+                  <span className={`inline-block h-4 w-4 rounded-full bg-white shadow-sm transition-transform duration-200
+                    ${showHeatName ? 'translate-x-4' : 'translate-x-0'}`} />
                 </div>
-                <button
-                  onClick={() => setShowHeatName(v => !v)}
-                  aria-label="Переключить название хита"
-                  className={`relative inline-flex h-6 w-11 shrink-0 rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none
-                    ${showHeatName ? 'bg-[#2F6BFF]' : 'bg-[#CBD5E1]'}`}
-                >
-                  <span className={`inline-block h-5 w-5 rounded-full bg-white shadow-sm transition-transform duration-200
-                    ${showHeatName ? 'translate-x-5' : 'translate-x-0'}`} />
-                </button>
-              </div>
-              {/* Row: Время */}
-              <div className="flex items-center justify-between px-4 py-3">
-                <div>
-                  <p className="text-sm font-inter font-medium text-[#0F172A]">Время</p>
-                  <p className="text-[11px] text-[#94A3B8] mt-0.5">Таймер текущего заезда</p>
+              </button>
+              {/* Tile: Время */}
+              <button
+                onClick={() => setShowTime(v => !v)}
+                aria-pressed={showTime}
+                className={`flex flex-col items-start gap-3 p-3 rounded-[14px] border-2 transition-all duration-150 tile-hover text-left
+                  ${showTime ? 'border-[#2F6BFF] bg-[#EEF3FF]' : 'border-[#E2E8F0] bg-white hover:border-[#CBD5E1]'}`}
+              >
+                <Icon name="Clock" size={18} className={showTime ? 'text-[#2F6BFF]' : 'text-[#94A3B8]'} />
+                <p className={`text-xs font-inter font-semibold leading-tight ${showTime ? 'text-[#2F6BFF]' : 'text-[#0F172A]'}`}>
+                  Время
+                </p>
+                <div className={`relative inline-flex h-5 w-9 shrink-0 rounded-full border-2 border-transparent transition-colors duration-200
+                  ${showTime ? 'bg-[#2F6BFF]' : 'bg-[#CBD5E1]'}`}>
+                  <span className={`inline-block h-4 w-4 rounded-full bg-white shadow-sm transition-transform duration-200
+                    ${showTime ? 'translate-x-4' : 'translate-x-0'}`} />
                 </div>
-                <button
-                  onClick={() => setShowTime(v => !v)}
-                  aria-label="Переключить время"
-                  className={`relative inline-flex h-6 w-11 shrink-0 rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none
-                    ${showTime ? 'bg-[#2F6BFF]' : 'bg-[#CBD5E1]'}`}
-                >
-                  <span className={`inline-block h-5 w-5 rounded-full bg-white shadow-sm transition-transform duration-200
-                    ${showTime ? 'translate-x-5' : 'translate-x-0'}`} />
-                </button>
-              </div>
-              {/* Row: Реклама */}
-              <div className="flex items-center justify-between px-4 py-3 bg-[#F8FAFC]">
-                <div>
-                  <p className="text-sm font-inter font-medium text-[#94A3B8]">Реклама</p>
-                  <p className="text-[11px] text-[#CBD5E1] mt-0.5">Всегда включена</p>
-                </div>
-                <div className="relative inline-flex h-6 w-11 shrink-0 rounded-full bg-[#2F6BFF] opacity-50 cursor-not-allowed">
-                  <span className="inline-block h-5 w-5 rounded-full bg-white shadow-sm translate-x-5" />
+              </button>
+              {/* Tile: Реклама */}
+              <div className="flex flex-col items-start gap-3 p-3 rounded-[14px] border-2 border-[#2F6BFF] bg-[#EEF3FF] opacity-50 cursor-not-allowed">
+                <Icon name="Megaphone" size={18} className="text-[#2F6BFF]" />
+                <p className="text-xs font-inter font-semibold leading-tight text-[#2F6BFF]">Реклама</p>
+                <div className="relative inline-flex h-5 w-9 shrink-0 rounded-full bg-[#2F6BFF]">
+                  <span className="inline-block h-4 w-4 rounded-full bg-white shadow-sm translate-x-4" />
                 </div>
               </div>
             </div>
