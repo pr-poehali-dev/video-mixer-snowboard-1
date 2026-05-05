@@ -130,33 +130,34 @@ export default function Index() {
       </header>
 
       {/* MAIN */}
-      <main className="flex-1 max-w-[1600px] mx-auto w-full px-4 py-5 gap-4
-        flex flex-col
-        lg:grid lg:grid-cols-[1fr_42%] lg:grid-rows-1">
+      <main className="flex-1 max-w-[1600px] mx-auto w-full px-4 py-5 gap-4 flex flex-col">
+
+        {/* ═══ PUBLISH ROW — full width ═══ */}
+        <div className="flex items-center gap-3 pb-1 border-b border-[#E2E8F0]">
+          <button
+            onClick={() => setHasActiveHeat(v => !v)}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-inter font-semibold transition-all
+              ${hasActiveHeat
+                ? 'bg-[#E5263C] text-white hover:bg-[#cc1f32]'
+                : 'bg-[#2F6BFF] text-white hover:bg-[#1a56e8]'
+              }`}
+          >
+            {hasActiveHeat
+              ? <><span className="w-2 h-2 rounded-full bg-white blink-dot shrink-0" />В эфире</>
+              : <><Icon name="Radio" size={14} />Опубликовать</>
+            }
+          </button>
+          <label className="flex items-center gap-2 cursor-pointer select-none">
+            <input type="checkbox" className="w-4 h-4 rounded accent-[#2F6BFF] cursor-pointer" />
+            <span className="text-xs font-inter text-[#64748B]">Автопубликация через 5 сек</span>
+          </label>
+        </div>
+
+        {/* ═══ TWO COLUMNS ═══ */}
+        <div className="flex-1 flex flex-col gap-4 lg:grid lg:grid-cols-[1fr_42%] lg:gap-4">
 
         {/* ═══ SCENE PICKER ═══ */}
         <section className={`flex flex-col gap-4 transition-opacity duration-300 ${!hasActiveHeat ? 'opacity-40 pointer-events-none' : ''}`}>
-
-          {/* Publish row */}
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setHasActiveHeat(v => !v)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-inter font-semibold transition-all
-                ${hasActiveHeat
-                  ? 'bg-[#E5263C] text-white hover:bg-[#cc1f32]'
-                  : 'bg-[#2F6BFF] text-white hover:bg-[#1a56e8]'
-                }`}
-            >
-              {hasActiveHeat
-                ? <><span className="w-2 h-2 rounded-full bg-white blink-dot shrink-0" /> В эфире</>
-                : <><Icon name="Radio" size={14} /> Опубликовать</>
-              }
-            </button>
-            <label className="flex items-center gap-2 cursor-pointer select-none">
-              <input type="checkbox" className="w-4 h-4 rounded accent-[#2F6BFF] cursor-pointer" />
-              <span className="text-xs font-inter text-[#64748B]">Автопубликация через 5 сек</span>
-            </label>
-          </div>
 
           <div className="flex items-center gap-2">
             <h2 className="text-[15px] font-inter font-bold text-[#0F172A]">Сцена</h2>
@@ -285,6 +286,7 @@ export default function Index() {
             </button>
           </div>
         </section>
+        </div>
       </main>
 
       {/* FAB — mobile only */}
